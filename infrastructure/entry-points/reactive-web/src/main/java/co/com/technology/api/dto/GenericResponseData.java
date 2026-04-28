@@ -1,4 +1,4 @@
-package co.com.technology.api.common;
+package co.com.technology.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package co.com.technology.api.technology;
 
-import co.com.technology.api.common.GenericResponseData;
+import co.com.technology.api.dto.GenericResponseData;
 import co.com.technology.api.technology.dto.TechnologyRequest;
 import co.com.technology.api.technology.dto.TechnologyResponse;
 import co.com.technology.usecase.createtechnology.CreateTechnologyService;
