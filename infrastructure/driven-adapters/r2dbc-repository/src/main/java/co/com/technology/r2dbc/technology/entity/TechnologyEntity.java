@@ -1,4 +1,4 @@
-package co.com.technology.r2dbc.technology;
+package co.com.technology.r2dbc.technology.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

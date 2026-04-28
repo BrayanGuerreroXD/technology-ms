@@ -1,6 +1,7 @@
-package co.com.technology.r2dbc.technology;
+package co.com.technology.r2dbc.technology.mapper;
 
 import co.com.technology.model.technology.Technology;
+import co.com.technology.r2dbc.technology.entity.TechnologyEntity;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

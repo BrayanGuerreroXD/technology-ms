@@ -1,7 +1,10 @@
-package co.com.technology.r2dbc.technology;
+package co.com.technology.r2dbc.technology.adapter;
 
 import co.com.technology.model.technology.Technology;
 import co.com.technology.model.technology.gateways.TechnologyRepository;
+import co.com.technology.r2dbc.technology.entity.TechnologyEntity;
+import co.com.technology.r2dbc.technology.mapper.TechnologyEntityMapper;
+import co.com.technology.r2dbc.technology.repository.TechnologyEntityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
