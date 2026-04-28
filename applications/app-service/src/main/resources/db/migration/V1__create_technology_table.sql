@@ -1,0 +1,8 @@
+CREATE TABLE technology (
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name        VARCHAR(100)  NOT NULL,
+    description VARCHAR(500)  NOT NULL,
+    created_at  DATETIME      DEFAULT CURRENT_TIMESTAMP,
+    updated_at  DATETIME      DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at  DATETIME      NULL DEFAULT NULL
+);

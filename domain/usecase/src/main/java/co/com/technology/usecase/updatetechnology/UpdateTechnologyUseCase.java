@@ -1,6 +1,20 @@
 package co.com.technology.usecase.updatetechnology;
 
+import co.com.technology.model.technology.Technology;
+import co.com.technology.model.technology.gateways.TechnologyRepository;
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Mono;
+
 @RequiredArgsConstructor
-public class UpdateTechnologyUseCase {
+public class UpdateTechnologyUseCase implements UpdateTechnologyService {
+
+    private final TechnologyRepository technologyRepository;
+
+    @Override
+    public Mono<Technology> update(Long id, Technology technology) {
+        return technologyRepository.findById(id)
+            .flatMap(existing -> technologyRepository.update(
+                technology.toBuilder().id(id).build()
+            ));
+    }
 }

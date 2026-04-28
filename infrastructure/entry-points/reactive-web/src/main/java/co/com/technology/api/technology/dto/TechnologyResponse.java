@@ -1,22 +1,22 @@
-package co.com.technology.model.technology;
-import lombok.Builder;
+package co.com.technology.api.technology.dto;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-//import lombok.NoArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-//@NoArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
-@Builder(toBuilder = true)
-public class Technology {
+@Builder
+public class TechnologyResponse {
     private Long id;
     private String name;
     private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private LocalDateTime deletedAt;
 }

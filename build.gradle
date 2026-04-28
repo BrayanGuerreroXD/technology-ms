@@ -8,6 +8,7 @@ buildscript {
 		pitestVersion = '1.19.0-rc.3'
 		pitestHistoryVersion = '0.0.1'
         lombokVersion = '1.18.44'
+		mapstructVersion = '1.6.3'
 	}
 }
 
