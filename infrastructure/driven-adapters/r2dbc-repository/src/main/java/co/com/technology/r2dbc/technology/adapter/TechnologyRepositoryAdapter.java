@@ -37,6 +37,12 @@ public class TechnologyRepositoryAdapter implements TechnologyRepository {
     }
 
     @Override
+    public Mono<Technology> findByName(String name) {
+        return entityRepository.findByNameAndDeletedAtIsNull(name)
+                .map(mapper::toModel);
+    }
+
+    @Override
     public Flux<Technology> findAll(int page, int size) {
         return entityRepository.findAllByDeletedAtIsNull(PageRequest.of(page, size))
                 .map(mapper::toModel);

@@ -8,6 +8,7 @@ public interface TechnologyRepository {
     Mono<Technology> save(Technology technology);
     Mono<Technology> update(Technology technology);
     Mono<Technology> findById(Long id);
+    Mono<Technology> findByName(String name);
     Flux<Technology> findAll(int page, int size);
     Mono<Void> softDelete(Long id);
     Mono<Long> count();
