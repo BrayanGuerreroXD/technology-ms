@@ -1,5 +1,6 @@
 package co.com.technology.api.technology;
 
+import co.com.technology.api.common.GenericResponseData;
 import co.com.technology.api.technology.dto.TechnologyRequest;
 import co.com.technology.api.technology.dto.TechnologyResponse;
 import co.com.technology.usecase.createtechnology.CreateTechnologyService;
@@ -25,27 +26,31 @@ public class TechnologyHandler {
     public Mono<ServerResponse> create(ServerRequest request) {
         return request.bodyToMono(TechnologyRequest.class)
             .flatMap(dto -> createService.create(mapper.toModel(dto)))
-            .flatMap(tech -> ServerResponse.ok().bodyValue(mapper.toResponse(tech)));
+            .map(mapper::toResponse)
+            .flatMap(response -> ServerResponse.ok().bodyValue(GenericResponseData.of(response)));
     }
 
     public Mono<ServerResponse> update(ServerRequest request) {
         Long id = Long.valueOf(request.pathVariable("id"));
         return request.bodyToMono(TechnologyRequest.class)
             .flatMap(dto -> updateService.update(id, mapper.toModel(dto)))
-            .flatMap(tech -> ServerResponse.ok().bodyValue(mapper.toResponse(tech)));
+            .map(mapper::toResponse)
+            .flatMap(response -> ServerResponse.ok().bodyValue(GenericResponseData.of(response)));
     }
 
     public Mono<ServerResponse> getById(ServerRequest request) {
         Long id = Long.valueOf(request.pathVariable("id"));
         return getService.getById(id)
-            .flatMap(tech -> ServerResponse.ok().bodyValue(mapper.toResponse(tech)));
+            .map(mapper::toResponse)
+            .flatMap(response -> ServerResponse.ok().bodyValue(GenericResponseData.of(response)));
     }
 
     public Mono<ServerResponse> getAll(ServerRequest request) {
         int page = Integer.parseInt(request.queryParam("page").orElse("0"));
         int size = Integer.parseInt(request.queryParam("size").orElse("10"));
         return ServerResponse.ok()
-            .body(getService.getAll(page, size).map(mapper::toResponse), TechnologyResponse.class);
+            .body(getService.getAll(page, size).map(mapper::toResponse).collectList()
+                .map(GenericResponseData::of), GenericResponseData.class);
     }
 
     public Mono<ServerResponse> delete(ServerRequest request) {
