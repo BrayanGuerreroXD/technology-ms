@@ -2,6 +2,8 @@ apply plugin: 'org.springframework.boot'
 
 dependencies {
 	implementation 'org.reactivecommons.utils:object-mapper:0.1.0'
+	implementation 'org.flywaydb:flyway-core'
+	implementation 'org.flywaydb:flyway-mysql'
 	implementation project(':r2dbc-repository')
 	implementation project(':reactive-web')
     implementation project(':model')

@@ -15,6 +15,6 @@ public class DeleteTechnologyUseCase implements DeleteTechnologyService {
     public Mono<Void> delete(Long id) {
         return technologyRepository.findById(id)
             .switchIfEmpty(Mono.error(new NotFoundException(GlobalExceptionEnum.TECHNOLOGY_NOT_FOUND)))
-            .flatMap(existing -> technologyRepository.softDelete(id));
+            .flatMap(existing -> technologyRepository.delete(id));
     }
 }

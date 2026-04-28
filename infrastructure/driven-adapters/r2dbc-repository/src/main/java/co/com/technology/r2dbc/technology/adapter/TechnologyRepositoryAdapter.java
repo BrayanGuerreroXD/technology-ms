@@ -2,7 +2,6 @@ package co.com.technology.r2dbc.technology.adapter;
 
 import co.com.technology.model.technology.Technology;
 import co.com.technology.model.technology.gateways.TechnologyRepository;
-import co.com.technology.r2dbc.technology.entity.TechnologyEntity;
 import co.com.technology.r2dbc.technology.mapper.TechnologyEntityMapper;
 import co.com.technology.r2dbc.technology.repository.TechnologyEntityRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,29 +31,29 @@ public class TechnologyRepositoryAdapter implements TechnologyRepository {
 
     @Override
     public Mono<Technology> findById(Long id) {
-        return entityRepository.findByIdAndDeletedAtIsNull(id)
+        return entityRepository.findById(id)
                 .map(mapper::toModel);
     }
 
     @Override
     public Mono<Technology> findByName(String name) {
-        return entityRepository.findByNameAndDeletedAtIsNull(name)
+        return entityRepository.findByName(name)
                 .map(mapper::toModel);
     }
 
     @Override
     public Flux<Technology> findAll(int page, int size) {
-        return entityRepository.findAllByDeletedAtIsNull(PageRequest.of(page, size))
+        return entityRepository.findAllBy(PageRequest.of(page, size))
                 .map(mapper::toModel);
     }
 
     @Override
-    public Mono<Void> softDelete(Long id) {
-        return entityRepository.softDeleteById(id).then();
+    public Mono<Void> delete(Long id) {
+        return entityRepository.deleteById(id);
     }
 
     @Override
     public Mono<Long> count() {
-        return entityRepository.countByDeletedAtIsNull();
+        return entityRepository.count();
     }
 }

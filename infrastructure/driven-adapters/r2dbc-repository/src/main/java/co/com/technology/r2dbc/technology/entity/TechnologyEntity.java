@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Table("technology")
+@Table("technologies")
 public class TechnologyEntity {
     @Id
     private Long id;
@@ -26,6 +26,4 @@ public class TechnologyEntity {
     private LocalDateTime createdAt;
     @Column("updated_at")
     private LocalDateTime updatedAt;
-    @Column("deleted_at")
-    private LocalDateTime deletedAt;
 }

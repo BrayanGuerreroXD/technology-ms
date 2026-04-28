@@ -34,10 +34,10 @@ class DeleteTechnologyUseCaseTest {
     }
 
     @Test
-    void delete_whenFound_softDeletesSuccessfully() {
+    void delete_whenFound_deletesSuccessfully() {
         Technology existing = Technology.builder().id(1L).name("Java").description("desc").build();
         when(technologyRepository.findById(1L)).thenReturn(Mono.just(existing));
-        when(technologyRepository.softDelete(1L)).thenReturn(Mono.empty());
+        when(technologyRepository.delete(1L)).thenReturn(Mono.empty());
 
         StepVerifier.create(useCase.delete(1L))
             .verifyComplete();
