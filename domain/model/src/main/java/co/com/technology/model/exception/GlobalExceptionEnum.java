@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 public enum GlobalExceptionEnum {
     TECHNOLOGY_NOT_FOUND("Technology not found", "No technology found with the provided identifier"),
     TECHNOLOGY_NAME_ALREADY_EXISTS("Technology name already exists", "A technology with the provided name already exists"),
-    INVALID_TECHNOLOGY_ID("Invalid technology ID", "The provided technology ID is not valid");
+    INVALID_TECHNOLOGY_ID("Invalid technology ID", "The provided technology ID is not valid"),
+    UNAUTHORIZED("Unauthorized", "Token is missing or invalid"),
+    TOKEN_EXPIRED("Token expired", "The provided token has expired");
 
     private final String message;
     private final String description;
