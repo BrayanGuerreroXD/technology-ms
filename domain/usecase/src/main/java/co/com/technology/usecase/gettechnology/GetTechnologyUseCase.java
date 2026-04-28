@@ -1,5 +1,7 @@
 package co.com.technology.usecase.gettechnology;
 
+import co.com.technology.model.exception.GlobalExceptionEnum;
+import co.com.technology.model.exception.NotFoundException;
 import co.com.technology.model.technology.Technology;
 import co.com.technology.model.technology.gateways.TechnologyRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +15,8 @@ public class GetTechnologyUseCase implements GetTechnologyService {
 
     @Override
     public Mono<Technology> getById(Long id) {
-        return technologyRepository.findById(id);
+        return technologyRepository.findById(id)
+            .switchIfEmpty(Mono.error(new NotFoundException(GlobalExceptionEnum.TECHNOLOGY_NOT_FOUND)));
     }
 
     @Override
