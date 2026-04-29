@@ -7,6 +7,7 @@ dependencies {
 	implementation project(':r2dbc-repository')
 	implementation project(':reactive-web')
 	implementation project(':kafka-publisher')
+	implementation project(':kafka-consumer')
     implementation project(':model')
     implementation project(':usecase')
     implementation 'org.springframework.boot:spring-boot-starter'
