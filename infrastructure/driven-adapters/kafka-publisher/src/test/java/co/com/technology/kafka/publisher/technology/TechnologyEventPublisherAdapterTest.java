@@ -4,9 +4,9 @@ import co.com.technology.model.technology.Technology;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.TopicPartition;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -26,8 +26,15 @@ class TechnologyEventPublisherAdapterTest {
     @Mock
     private TechnologyEventMapper mapper;
 
-    @InjectMocks
     private TechnologyEventPublisherAdapter adapter;
+
+    @BeforeEach
+    void setUp() {
+        adapter = new TechnologyEventPublisherAdapter(
+                kafkaTemplate, mapper,
+                "sync.technologies.catalog",
+                "sync.technologies.deleted");
+    }
 
     private SendResult<String, Object> mockSendResult() {
         ProducerRecord<String, Object> producerRecord = new ProducerRecord<>("topic", "value");
