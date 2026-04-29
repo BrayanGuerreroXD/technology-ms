@@ -3,6 +3,7 @@ package co.com.technology.usecase.createtechnology;
 import co.com.technology.model.exception.ConflictException;
 import co.com.technology.model.exception.GlobalExceptionEnum;
 import co.com.technology.model.technology.Technology;
+import co.com.technology.model.technology.gateways.TechnologyEventGateway;
 import co.com.technology.model.technology.gateways.TechnologyRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +14,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -20,6 +22,9 @@ class CreateTechnologyUseCaseTest {
 
     @Mock
     private TechnologyRepository technologyRepository;
+
+    @Mock
+    private TechnologyEventGateway eventGateway;
 
     @InjectMocks
     private CreateTechnologyUseCase useCase;
@@ -38,15 +43,18 @@ class CreateTechnologyUseCaseTest {
     }
 
     @Test
-    void create_whenNameIsUnique_savesAndReturnsTechnology() {
+    void create_whenNameIsUnique_savesAndPublishesEvent() {
         Technology input = Technology.builder().name("Kotlin").description("JVM language").build();
         Technology saved = Technology.builder().id(2L).name("Kotlin").description("JVM language").build();
 
         when(technologyRepository.findByName("Kotlin")).thenReturn(Mono.empty());
         when(technologyRepository.save(any())).thenReturn(Mono.just(saved));
+        when(eventGateway.publish(saved)).thenReturn(Mono.empty());
 
         StepVerifier.create(useCase.create(input))
             .expectNext(saved)
             .verifyComplete();
+
+        verify(eventGateway).publish(saved);
     }
 }
