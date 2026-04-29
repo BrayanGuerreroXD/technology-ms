@@ -19,7 +19,7 @@ public class AuthLoginConsumer {
     private final AuthEventMapper mapper;
     private final ObjectMapper objectMapper;
 
-    @KafkaListener(topics = "auth.login.admin")
+    @KafkaListener(topics = "${kafka.topics.auth-login-admin}")
     public void consume(ConsumerRecord<String, String> record) {
         try {
             AuthLoginEvent event = objectMapper.readValue(record.value(), AuthLoginEvent.class);

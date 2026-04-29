@@ -17,7 +17,7 @@ public class AuthLogoutConsumer {
     private final DeleteAuthService deleteAuthService;
     private final ObjectMapper objectMapper;
 
-    @KafkaListener(topics = "generic.auth.logout")
+    @KafkaListener(topics = "${kafka.topics.generic-auth-logout}")
     public void consume(ConsumerRecord<String, String> record) {
         try {
             AuthLogoutEvent event = objectMapper.readValue(record.value(), AuthLogoutEvent.class);
