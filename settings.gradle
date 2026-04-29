@@ -23,3 +23,7 @@ include ':r2dbc-repository'
 project(':r2dbc-repository').projectDir = file('./infrastructure/driven-adapters/r2dbc-repository')
 include ':reactive-web'
 project(':reactive-web').projectDir = file('./infrastructure/entry-points/reactive-web')
+include ':kafka-publisher'
+project(':kafka-publisher').projectDir = file('./infrastructure/driven-adapters/kafka-publisher')
+include ':kafka-consumer'
+project(':kafka-consumer').projectDir = file('./infrastructure/entry-points/kafka-consumer')
