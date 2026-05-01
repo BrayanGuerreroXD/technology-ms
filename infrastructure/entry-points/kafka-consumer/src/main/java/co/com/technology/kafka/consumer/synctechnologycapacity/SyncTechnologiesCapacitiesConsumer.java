@@ -1,7 +1,6 @@
 package co.com.technology.kafka.consumer.synctechnologycapacity;
 
 import co.com.technology.kafka.consumer.dto.SyncTechnologiesCapacitiesEvent;
-import co.com.technology.kafka.consumer.mapper.SyncTechnologiesCapacitiesMapper;
 import co.com.technology.usecase.synctechnologycapacity.SyncTechnologyCapacityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,6 @@ import tools.jackson.databind.ObjectMapper;
 public class SyncTechnologiesCapacitiesConsumer {
 
     private final SyncTechnologyCapacityService syncTechnologyCapacityService;
-    private final SyncTechnologiesCapacitiesMapper mapper;
     private final ObjectMapper objectMapper;
 
     @KafkaListener(topics = "${kafka.topics.sync-technologies-capacities-match}")
