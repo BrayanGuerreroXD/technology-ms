@@ -1,47 +1,127 @@
-# Proyecto Base Implementando Clean Architecture
+# Technology MS
 
-## Antes de Iniciar
+Microservicio de gestión de tecnologías y capacidades tecnológicas, desarrollado con Clean Architecture y Spring Boot.
 
-Empezaremos por explicar los diferentes componentes del proyectos y partiremos de los componentes externos, continuando con los componentes core de negocio (dominio) y por último el inicio y configuración de la aplicación.
+## Descripción
 
-Lee el artículo [Clean Architecture — Aislando los detalles](https://medium.com/bancolombia-tech/clean-architecture-aislando-los-detalles-4f9530f35d7a)
+Technology MS permite administrar el catálogo de tecnologías de una organización, incluyendo sus capacidades tecnológicas asociadas. El servicio expone una API reactiva para operaciones CRUD y se integra mediante eventos Kafka para sincronización con otros microservicios.
 
-# Arquitectura
+## Diagrama de Entidades
 
-![Clean Architecture](https://miro.medium.com/max/1400/1*ZdlHz8B0-qu9Y-QO3AXR_w.png)
+```
+┌─────────────────────┐       ┌───────────────────────────┐
+│      Technology     │       │   TechnologyCapacity      │
+├─────────────────────┤       ├───────────────────────────┤
+│ Long id             │──┐    │ Long id                   │
+│ String name         │  │    │ Long technologyId (FK)    │◄─┐
+│ String description  │  │    │ Long capacityExternalId   │  │
+│ LocalDateTime       │  └───►│                           │  │
+│   createdAt         │       └───────────────────────────┘  │
+│ LocalDateTime       │                                      │
+│   updatedAt         │                                      │
+└─────────────────────┘                                      │
+                                                              │
+                                                              │
+┌─────────────────────┐                                      │
+│        Auth         │                                      │
+├─────────────────────┤                                      │
+│ Long id             │                                      │
+│ String email        │                                      │
+│ String token        │                                      │
+│ Integer expiresIn   │                                      │
+│ LocalDateTime       │                                      │
+│   createdAt         │                                      │
+└─────────────────────┘                                      │
+```
 
-## Domain
+### Entidades
 
-Es el módulo más interno de la arquitectura, pertenece a la capa del dominio y encapsula la lógica y reglas del negocio mediante modelos y entidades del dominio.
+- **Technology**: Representa una tecnología del catálogo (nombre, descripción, timestamps)
+- **TechnologyCapacity**: Vincula una tecnología con una capacidad externa (relación N:1)
+- **Auth**: Almacena tokens de autenticación de usuarios (email, token, expiración)
 
-## Usecases
+## Tecnologías
 
-Este módulo gradle perteneciente a la capa del dominio, implementa los casos de uso del sistema, define lógica de aplicación y reacciona a las invocaciones desde el módulo de entry points, orquestando los flujos hacia el módulo de entities.
+| Componente | Tecnología                   |
+|------------|------------------------------|
+| Lenguaje | Java 25                      |
+| Framework | Spring Boot 4.0.5            |
+| Arquitectura | Clean Architecture           |
+| Persistencia | R2DBC (Reactivo)             |
+| Mensajeria | Apache Kafka                 |
+| API | Spring WebFlux (Reactivo)    |
+| Seguridad | Spring Security              |
+| Build | Gradle                       |
+| Testing | JUnit 5, Mockito, BlockHound |
+| Calidad | SonarQube, JaCoCo, Pitest    |
 
-## Infrastructure
+## Estructura del Proyecto
 
-### Helpers
+```
+technology-ms/
+├── applications/          # Capa de aplicación (assemblers, configuración)
+│   └── app-service/
+├── domain/                # Capa de dominio
+│   ├── model/            # Entidades y excepciones del dominio
+│   └── usecase/          # Casos de uso
+├── infrastructure/        # Capa de infraestructura
+│   ├── driven-adapters/  # Adaptadores de persistencia y mensajería
+│   │   ├── kafka-publisher/
+│   │   └── r2dbc-repository/
+│   └── entry-points/     # Puntos de entrada (API REST, Kafka consumers)
+│       ├── reactive-web/
+│       └── kafka-consumer/
+├── deployment/            # Configuración de despliegue
+├── docs/                  # Documentación adicional
+└── README.md
+```
 
-En el apartado de helpers tendremos utilidades generales para los Driven Adapters y Entry Points.
+## Clean Architecture
 
-Estas utilidades no están arraigadas a objetos concretos, se realiza el uso de generics para modelar comportamientos
-genéricos de los diferentes objetos de persistencia que puedan existir, este tipo de implementaciones se realizan
-basadas en el patrón de diseño [Unit of Work y Repository](https://medium.com/@krzychukosobudzki/repository-design-pattern-bc490b256006)
+```
+┌─────────────────────────────────────────────┐
+│              Infrastructure                 │
+│  ┌─────────────────┐  ┌──────────────────┐  │
+│  │  Entry Points   │  │  Driven Adapters │  │
+│  │  - REST API      │  │  - R2DBC         │  │
+│  │  - Kafka Cons.   │  │  - Kafka Pub.    │  │
+│  └─────────────────┘  └──────────────────┘  │
+├─────────────────────────────────────────────┤
+│                 Domain                       │
+│  ┌─────────────────┐  ┌──────────────────┐  │
+│  │     Model       │  │    Use Cases     │  │
+│  │  - Technology   │  │  - CRUD Tech     │  │
+│  │  - Auth         │  │  - Sync Capacity │  │
+│  │  - Exceptions   │  │  - Auth Mgmt     │  │
+│  └─────────────────┘  └──────────────────┘  │
+├─────────────────────────────────────────────┤
+│               Application                    │
+│         (Assembler, DI, Main)                │
+└─────────────────────────────────────────────┘
+```
 
-Estas clases no puede existir solas y debe heredarse su compartimiento en los **Driven Adapters**
+## Getting Started
 
-### Driven Adapters
+```bash
+./gradlew bootRun
+```
 
-Los driven adapter representan implementaciones externas a nuestro sistema, como lo son conexiones a servicios rest,
-soap, bases de datos, lectura de archivos planos, y en concreto cualquier origen y fuente de datos con la que debamos
-interactuar.
+## API Endpoints
 
-### Entry Points
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| GET | /api/v1/technologies | Listar tecnologías |
+| GET | /api/v1/technologies/{id} | Obtener tecnología |
+| POST | /api/v1/technologies | Crear tecnología |
+| PUT | /api/v1/technologies/{id} | Actualizar tecnología |
+| DELETE | /api/v1/technologies/{id} | Eliminar tecnología |
 
-Los entry points representan los puntos de entrada de la aplicación o el inicio de los flujos de negocio.
+## Eventos Kafka
 
-## Application
+### Consumo
+- `auth-login-events`: Eventos de login de usuarios
+- `auth-logout-events`: Eventos de logout de usuarios
+- `sync-technologies-capacities`: Sincronización de capacidades tecnológicas
 
-Este módulo es el más externo de la arquitectura, es el encargado de ensamblar los distintos módulos, resolver las dependencias y crear los beans de los casos de use (UseCases) de forma automática, inyectando en éstos instancias concretas de las dependencias declaradas. Además inicia la aplicación (es el único módulo del proyecto donde encontraremos la función “public static void main(String[] args)”.
-
-**Los beans de los casos de uso se disponibilizan automaticamente gracias a un '@ComponentScan' ubicado en esta capa.**
+### Publicación
+- `technology-catalog-events`: Eventos de catálogo de tecnologías
