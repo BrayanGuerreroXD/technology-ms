@@ -1,10 +1,12 @@
 package co.com.technology.usecase.deletetechnology;
 
+import co.com.technology.model.exception.ConflictException;
 import co.com.technology.model.exception.GlobalExceptionEnum;
 import co.com.technology.model.exception.NotFoundException;
 import co.com.technology.model.technology.Technology;
 import co.com.technology.model.technology.gateways.TechnologyEventGateway;
 import co.com.technology.model.technology.gateways.TechnologyRepository;
+import co.com.technology.model.technologycapacity.gateways.TechnologyCapacityRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,6 +27,9 @@ class DeleteTechnologyUseCaseTest {
     @Mock
     private TechnologyEventGateway eventGateway;
 
+    @Mock
+    private TechnologyCapacityRepository technologyCapacityRepository;
+
     @InjectMocks
     private DeleteTechnologyUseCase useCase;
 
@@ -39,15 +44,29 @@ class DeleteTechnologyUseCaseTest {
     }
 
     @Test
-    void delete_whenFound_deletesAndPublishesDeletedEvent() {
+    void delete_whenInUse_throwsConflictException() {
         Technology existing = Technology.builder().id(1L).name("Java").description("desc").build();
         when(technologyRepository.findById(1L)).thenReturn(Mono.just(existing));
+        when(technologyCapacityRepository.existsByTechnologyId(1L)).thenReturn(Mono.just(true));
+
+        StepVerifier.create(useCase.delete(1L))
+            .expectErrorMatches(e -> e instanceof ConflictException &&
+                ((ConflictException) e).getError() == GlobalExceptionEnum.TECHNOLOGY_IN_USE)
+            .verify();
+    }
+
+    @Test
+    void delete_whenFoundAndNotInUse_deletesAndPublishesDeletedEvent() {
+        Technology existing = Technology.builder().id(1L).name("Java").description("desc").build();
+        when(technologyRepository.findById(1L)).thenReturn(Mono.just(existing));
+        when(technologyCapacityRepository.existsByTechnologyId(1L)).thenReturn(Mono.just(false));
         when(technologyRepository.delete(1L)).thenReturn(Mono.empty());
         when(eventGateway.publishDeleted(existing)).thenReturn(Mono.empty());
 
         StepVerifier.create(useCase.delete(1L))
             .verifyComplete();
 
+        verify(technologyRepository).delete(1L);
         verify(eventGateway).publishDeleted(existing);
     }
 }
