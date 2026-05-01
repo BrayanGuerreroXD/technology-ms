@@ -34,4 +34,9 @@ public class TechnologyCapacityRepositoryAdapter implements TechnologyCapacityRe
         return entityRepository.saveAll(Flux.fromIterable(entities).map(mapper::toEntity))
                 .map(mapper::toModel);
     }
+
+    @Override
+    public Mono<Boolean> existsByTechnologyId(Long technologyId) {
+        return entityRepository.existsByTechnologyId(technologyId);
+    }
 }
