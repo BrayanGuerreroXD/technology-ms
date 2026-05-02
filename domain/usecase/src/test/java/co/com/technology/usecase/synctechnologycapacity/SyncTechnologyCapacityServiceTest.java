@@ -2,9 +2,10 @@ package co.com.technology.usecase.synctechnologycapacity;
 
 import co.com.technology.model.technologycapacity.TechnologyCapacity;
 import co.com.technology.model.technologycapacity.gateways.TechnologyCapacityRepository;
+import co.com.technology.usecase.synctechnologycapacity.SyncTechnologyCapacityUseCase;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Flux;
@@ -22,8 +23,12 @@ class SyncTechnologyCapacityServiceTest {
     @Mock
     private TechnologyCapacityRepository repository;
 
-    @InjectMocks
     private SyncTechnologyCapacityService service;
+
+    @BeforeEach
+    void setUp() {
+        service = new SyncTechnologyCapacityUseCase(repository);
+    }
 
     @Test
     void sync_withTechnologyIds_deletesAndSavesNewRecords() {

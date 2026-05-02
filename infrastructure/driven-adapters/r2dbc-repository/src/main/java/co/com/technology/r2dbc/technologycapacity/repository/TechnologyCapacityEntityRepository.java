@@ -10,4 +10,5 @@ import reactor.core.publisher.Mono;
 public interface TechnologyCapacityEntityRepository extends R2dbcRepository<TechnologyCapacityEntity, Long> {
     Flux<TechnologyCapacityEntity> findByCapacityExternalId(Long capacityExternalId);
     Mono<Boolean> existsByTechnologyId(Long technologyId);
+    Mono<Void> deleteByTechnologyId(Long technologyId);
 }

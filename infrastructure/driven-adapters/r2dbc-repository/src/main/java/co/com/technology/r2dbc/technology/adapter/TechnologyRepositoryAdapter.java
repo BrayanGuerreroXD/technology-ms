@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -55,5 +56,10 @@ public class TechnologyRepositoryAdapter implements TechnologyRepository {
     @Override
     public Mono<Long> count() {
         return entityRepository.count();
+    }
+
+    @Override
+    public Mono<Void> deleteByIds(List<Long> ids) {
+        return entityRepository.deleteByIdIn(ids);
     }
 }
