@@ -6,7 +6,10 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 public interface TechnologyEntityRepository extends ReactiveCrudRepository<TechnologyEntity, Long> {
     Flux<TechnologyEntity> findAllBy(Pageable pageable);
     Mono<TechnologyEntity> findByName(String name);
+    Mono<Void> deleteByIdIn(List<Long> ids);
 }

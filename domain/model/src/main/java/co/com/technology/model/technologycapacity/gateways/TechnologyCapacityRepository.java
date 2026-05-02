@@ -9,4 +9,5 @@ public interface TechnologyCapacityRepository {
     Mono<Void> deleteByCapacityExternalId(Long capacityExternalId);
     Flux<TechnologyCapacity> saveAll(Iterable<TechnologyCapacity> entities);
     Mono<Boolean> existsByTechnologyId(Long technologyId);
+    Mono<Void> deleteByTechnologyId(Long technologyId);
 }

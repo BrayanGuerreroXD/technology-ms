@@ -44,3 +44,4 @@ kafka:
     sync-technology-catalog: sync.technologies.catalog
     sync-technology-deleted: sync.technologies.deleted
     sync-technologies-capacities-match: sync.technologies.capacities.match
+    delete-technology-match: delete.technology.match
